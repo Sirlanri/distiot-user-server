@@ -1,6 +1,9 @@
 package httphandler
 
-import "github.com/kataras/iris/v12"
+import (
+	"github.com/Sirlanri/distiot-user-server/server/config"
+	"github.com/kataras/iris/v12"
+)
 
 func IrisInit() {
 	app := iris.New()
@@ -10,4 +13,6 @@ func IrisInit() {
 		user.Post("/register", RegisterHandler)
 		user.Post("/resetpw", ResetPW)
 	}
+
+	app.Run(iris.Addr(":" + string(rune(config.Config.Port))))
 }
