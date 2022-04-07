@@ -1,11 +1,10 @@
 package encrypt
 
 import (
-	"github.com/Sirlanri/distiot-user-server/server/log"
 	"github.com/google/uuid"
 )
 
-func Getuuid() {
+func Generateuuid() string {
 	id := uuid.New()
-	log.Log.Debugln("uuid:", id)
+	return id.String()
 }
