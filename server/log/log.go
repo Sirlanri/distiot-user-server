@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
 //记录log
@@ -18,12 +17,12 @@ func init() {
 	Log = &logrus.Logger{
 		Out:   os.Stderr,
 		Level: level,
-		Formatter: &prefixed.TextFormatter{
+		Formatter: &logrus.TextFormatter{
 			DisableColors:   false,
 			TimestampFormat: "2006-01-02 15:04:05",
 			FullTimestamp:   true,
-			ForceFormatting: true,
-			ForceColors:     true,
+			//ForceFormatting: true,
+			ForceColors: true,
 		},
 	}
 
