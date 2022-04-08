@@ -2,30 +2,41 @@ package config
 
 import (
 	"io/ioutil"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/Sirlanri/distiot-user-server/server/log"
 	"gopkg.in/yaml.v3"
 )
 
+func init() {
+	ReadYaml()
+}
+
 type Conf struct {
 	EmailToken string `yaml:"emailtoken"`
-	Port       int    `yaml:"port"`
+	Port       string `yaml:"port"`
 }
 
 //全局配置文件
 var Config Conf
 
-func ReadYaml() (*Conf, error) {
-	buf, err := ioutil.ReadFile("config.yaml")
+func ReadYaml() {
+	file, _ := exec.LookPath(os.Args[0])
+	path, _ := filepath.Abs(file)
+	index := strings.LastIndex(path, string(os.PathSeparator))
+	path = path[:index+1]
+	fullPath := path + "conf.yaml"
+	buf, err := ioutil.ReadFile(fullPath)
 	if err != nil {
-		return nil, err
+		log.Log.Warnln("server-config ReadYaml 读取配置文件失败", err.Error())
+		return
 	}
-	var conf Conf
-	err = yaml.Unmarshal(buf, &conf)
+	err = yaml.Unmarshal(buf, &Config)
 	if err != nil {
 		log.Log.Errorln("配置文件读取失败", err.Error())
-		return nil, err
 	}
 
-	return &conf, nil
 }
