@@ -39,6 +39,28 @@ func RegisterHandler(con iris.Context) {
 
 }
 
+//handler 申请发送验证码
+func ApplyVcodeHandler(con iris.Context) {
+	mail := con.URLParam("mail")
+	if mail == "" {
+		con.StatusCode(401)
+		log.Log.Infoln("httpHandler ApplyVcodeHandler 参数错误")
+		return
+	}
+	vcode, err := user.VcodeProcess(mail)
+	if err != nil {
+		con.StatusCode(401)
+		log.Log.Infoln("httpHandler ApplyVcodeHandler 生成验证码失败", err.Error())
+		return
+	}
+	err = user.SendMailVcode(vcode, mail)
+	if err != nil {
+		con.StatusCode(401)
+		return
+	}
+	con.StatusCode(200)
+}
+
 //handler 处理重置密码请求
 func ResetPW(con iris.Context) {
 

@@ -12,8 +12,9 @@ func IrisInit() {
 	{
 		user.Post("/login", LoginHandler)
 		user.Post("/register", RegisterHandler)
+		user.Get("/vcode", ApplyVcodeHandler)
 		user.Post("/resetpw", ResetPW)
 	}
-
-	app.Run(iris.Addr(":" + string(rune(config.Config.Port))))
+	var portStr = config.Config.Port
+	app.Run(iris.Addr(":" + portStr))
 }
