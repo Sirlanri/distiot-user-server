@@ -8,15 +8,17 @@ import (
 	"github.com/kataras/iris/v12/sessions/sessiondb/redis"
 )
 
+var Sess *sessions.Sessions
+
 func SessionInit() {
-	var Sess *sessions.Sessions
+
 	db := redis.New(redis.Config{
 		Network:   "tcp",
 		Addr:      "127.0.0.1:6379",
 		Timeout:   2 * time.Second,
 		MaxActive: 10,
 		Password:  "",
-		Database:  "",
+		Database:  "1",
 		Prefix:    "",
 		Delim:     "iris-",
 		Driver:    redis.Redigo(), // redis.Radix() can be used instead.

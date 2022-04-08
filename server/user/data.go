@@ -14,17 +14,18 @@ type UserData struct {
 	Mail  string `gorm:"varChar(255)"`
 	Pw    string `gorm:"varChar(255)"`
 	Token string `gorm:"varChar(255)"`
+	Level int    `gorm:"int"`
 }
 
-//传入邮箱 从MySQL中获取用户加密后的密码
-func GetPwByMailMysql(mail string) (string, error) {
-	var user UserData
+//传入邮箱 从MySQL中获取用户的信息
+func GetUserByMailMysql(mail string) (*UserData, error) {
+	user := new(UserData)
 	err := db.Mdb.Where("mail = ?", mail).First(&user).Error
 	if err != nil {
 		log.Log.Infoln("server-db GetPwByMailMysql 查询失败", err.Error())
-		return "", err
+		return nil, err
 	}
-	return user.Pw, nil
+	return user, nil
 }
 
 //检查该邮箱是否存在，存在就返回true，不存在就返回false

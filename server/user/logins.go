@@ -9,18 +9,6 @@ import (
 /* 这个文件包括用户注册登录重置密码等请求
 换言之，就是未进入系统时的操作*/
 
-//传入用户名密码，判断密码是否正确
-func UserLogin(username string, password string) bool {
-	hashedPW, err := GetPwByMailMysql(username)
-	if err != nil {
-		return false
-	}
-	if encrypt.ComparePW(hashedPW, password) {
-		return true
-	}
-	return true
-}
-
 //传入用户邮箱，生成验证码，并写入Redis
 func VcodeProcess(mail string) error {
 	code := encrypt.GenerateVcode()
