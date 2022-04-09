@@ -36,7 +36,32 @@ func LoginHandler(con iris.Context) {
 
 //handler 处理注册请求
 func RegisterHandler(con iris.Context) {
+	var userRec UserRegisterData
+	err := con.ReadJSON(&userRec)
+	if err != nil {
+		log.Log.Infoln("httpHandler RegisterHandler 读取json失败", err.Error())
+		con.StatusCode(401)
+		return
+	}
 
+	//验证传入数据合法性
+	if userRec.Mail == "" || userRec.Vcode == "" || userRec.Pw == "" {
+		con.WriteString("邮箱密码验证码均不可为空")
+		con.StatusCode(401)
+		return
+	}
+	err = user.UserRegisterVerify(userRec.Mail, userRec.Vcode)
+	if err != nil {
+		con.WriteString(err.Error())
+		con.StatusCode(401)
+		return
+	}
+	err = user.InsertUserMysql(userRec.Mail, userRec.Pw)
+	if err != nil {
+		con.WriteString("服务器错误，注册失败")
+		con.StatusCode(401)
+		return
+	}
 }
 
 //handler 申请发送验证码
@@ -70,4 +95,11 @@ func ResetPW(con iris.Context) {
 type UserLoginData struct {
 	Mail string `json:"mail"`
 	Pw   string `json:"pw"`
+}
+
+//用户注册时传入的数据结构
+type UserRegisterData struct {
+	Mail  string `json:"mail"`
+	Pw    string `json:"pw"`
+	Vcode string `json:"vcode"`
 }

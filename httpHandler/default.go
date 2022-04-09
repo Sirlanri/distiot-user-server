@@ -12,7 +12,7 @@ func IrisInit() {
 	{
 		user.Post("/login", LoginHandler)
 		user.Post("/register", RegisterHandler)
-		user.Get("/vcode", ApplyVcodeHandler)
+		user.Get("/applyvcode", ApplyVcodeHandler)
 		user.Post("/resetpw", ResetPW)
 	}
 	var portStr = config.Config.Port

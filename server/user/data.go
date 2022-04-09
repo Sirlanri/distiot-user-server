@@ -9,7 +9,7 @@ import (
 )
 
 //包含id、mail、pw
-type UserData struct {
+type User struct {
 	ID    string `gorm:"primary_key"`
 	Mail  string `gorm:"varChar(255)"`
 	Pw    string `gorm:"varChar(255)"`
@@ -18,8 +18,8 @@ type UserData struct {
 }
 
 //传入邮箱 从MySQL中获取用户的信息
-func GetUserByMailMysql(mail string) (*UserData, error) {
-	user := new(UserData)
+func GetUserByMailMysql(mail string) (*User, error) {
+	user := new(User)
 	err := db.Mdb.Where("mail = ?", mail).First(&user).Error
 	if err != nil {
 		log.Log.Infoln("server-db GetPwByMailMysql 查询失败", err.Error())
@@ -30,7 +30,7 @@ func GetUserByMailMysql(mail string) (*UserData, error) {
 
 //检查该邮箱是否存在，存在就返回true，不存在就返回false
 func MailExist(mail string) bool {
-	var user UserData
+	var user User
 	err := db.Mdb.Where("mail = ?", mail).First(&user).Error
 	if err != nil {
 		return false
@@ -59,13 +59,19 @@ func GetVcodeRedis(mail string) (string, error) {
 	return code, nil
 }
 
-//将用户信息插入数据库
+//传入mail，pw。自动生成token，将用户信息插入数据库
 func InsertUserMysql(mail, pw string) error {
-	var user UserData
+	var user User
 	user.Mail = mail
-	user.Pw = pw
+	hashed, err := encrypt.GenerateHash(pw)
+	if err != nil {
+		log.Log.Warnln("server-db InsertUserMysql 加密失败", err.Error())
+		return err
+	}
+	user.Pw = hashed
 	user.Token = encrypt.Generateuuid() //uuid无法生成时，会返回""
-	err := db.Mdb.Create(&user).Error
+	user.Level = 1
+	err = db.Mdb.Omit("ID").Create(&user).Error
 	if err != nil {
 		log.Log.Warnln("server-db InsertUserMysql 存入MySQL失败", err.Error())
 		return err

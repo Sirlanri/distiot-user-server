@@ -28,7 +28,7 @@ func VcodeProcess(mail string) (string, error) {
 //发送验证码邮件
 func SendMailVcode(vode, mail string) error {
 	var bodyData VcodeMail
-	str := "您的验证码是： " + vode + " ，请在5分钟内使用，如非本人操作，请忽略此邮件。"
+	str := "Distiot-分布式物联网数据存储系统<br/>您的验证码如下，请在5分钟内使用，如非本人操作，请忽略此邮件。<br/>" + vode
 	bodyData.Content = str
 	bodyData.Addr = mail
 	bodyData.Topic = "Distiot验证码"
