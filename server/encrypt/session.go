@@ -10,8 +10,11 @@ import (
 
 var Sess *sessions.Sessions
 
-func SessionInit() {
+func init() {
+	SessionInit()
+}
 
+func SessionInit() {
 	db := redis.New(redis.Config{
 		Network:   "tcp",
 		Addr:      "127.0.0.1:6379",

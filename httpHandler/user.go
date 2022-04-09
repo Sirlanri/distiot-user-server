@@ -19,9 +19,14 @@ func LoginHandler(con iris.Context) {
 	}
 	//数据库中用户的信息
 	userDB, err := user.GetUserByMailMysql(userRec.Mail)
-	if err == nil || !encrypt.ComparePW(userDB.Pw, userRec.Pw) {
+	if err != nil {
+		con.WriteString("用户不存在")
 		con.StatusCode(401)
-		log.Log.Infoln("httpHandler LoginHandler 登录失败", err.Error())
+		return
+	}
+	if !encrypt.ComparePW(userDB.Pw, userRec.Pw) {
+		con.StatusCode(401)
+		log.Log.Infoln("httpHandler LoginHandler 密码错误，登录失败", userRec.Mail)
 		return
 	}
 	//进行权限的设置
