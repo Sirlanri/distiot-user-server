@@ -1,19 +1,22 @@
 package main
 
 import (
-	"github.com/Sirlanri/distiot-user-server/server/device"
+	"time"
+
+	"github.com/Sirlanri/distiot-user-server/rpcHandler/tokenrpc"
 	"github.com/Sirlanri/distiot-user-server/server/log"
 )
 
 func main() {
-	log.Log.Debugln("hello")
+	log.Log.Debugln("hello user后端")
 
 	//go httphandler.IrisInit()
-	ids, err := device.GetAllDeviceIDByToken("703fcc1-655e-4a4f-bdb1-5fecd89b07cb")
-	if err != nil {
-		log.Log.Errorln(err)
-	}
-	log.Log.Debugln(ids)
+	go func() {
+		tokenrpc.RPCListen()
+	}()
+	time.Sleep(time.Second * 3)
+
+	tokenrpc.RPCTest()
 	//从书中学到的奇淫技巧(*^▽^*)
 	select {}
 

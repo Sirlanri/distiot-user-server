@@ -16,6 +16,6 @@ func IrisInit() {
 		user.Post("/resetpw", ResetPW)
 		user.Get("/createdevice", CreateDeviceHandler)
 	}
-	var portStr = config.Config.Port
+	var portStr = config.Config.HttpPort
 	app.Run(iris.Addr(":" + portStr))
 }

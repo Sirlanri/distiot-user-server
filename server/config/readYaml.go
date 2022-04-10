@@ -17,7 +17,8 @@ func init() {
 
 type Conf struct {
 	EmailToken string `yaml:"emailtoken"`
-	Port       string `yaml:"port"`
+	HttpPort   string `yaml:"httpport"`
+	RpcPort    string `yaml:"rpcport"`
 }
 
 //全局配置文件
