@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func RPCTest() {
+func RPCTest(usertoken string) {
 	log.Log.Debugln("RPC测试开始")
 	conn, err := grpc.Dial("localhost:8092",
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -23,8 +23,12 @@ func RPCTest() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := c.GetToken(ctx, &pb.Tokenmsg{
-		Token: "This is Token",
+		Token: usertoken,
 	})
+	if err != nil {
+		log.Log.Errorln("测试失败！无此Token", err.Error())
+		return
+	}
 	log.Log.Debugln("返回消息：", r.UserID)
 
 }

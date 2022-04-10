@@ -1,8 +1,7 @@
 package main
 
 import (
-	"time"
-
+ 
 	"github.com/Sirlanri/distiot-user-server/rpcHandler/tokenrpc"
 	"github.com/Sirlanri/distiot-user-server/server/log"
 )
@@ -14,9 +13,9 @@ func main() {
 	go func() {
 		tokenrpc.RPCListen()
 	}()
-	time.Sleep(time.Second * 3)
 
-	tokenrpc.RPCTest()
+	tokenrpc.RPCTest("test1 failed")
+	tokenrpc.RPCTest("d703fcc1-655e-4a4f-bdb1-5fecd89b07cb")
 	//从书中学到的奇淫技巧(*^▽^*)
 	select {}
 
