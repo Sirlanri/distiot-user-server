@@ -72,6 +72,21 @@ func UserRegisterVerify(mail, code string) error {
 	return nil
 }
 
+//重置用户密码 验证邮箱及验证码的合法性，
+func ResetPWVerify(mail, vocde string) error {
+	//在邮箱中查找，确认邮箱存在
+	if !MailExist(mail) {
+		return errors.New("邮箱不存在")
+	}
+	//核验验证码
+	codeRds, err := GetVcodeRedis(mail)
+	if vocde != codeRds || err != nil {
+		return errors.New("验证码错误")
+	}
+	return nil
+
+}
+
 //发送验证码所需的结构体
 type VcodeMail struct {
 	Addr    string `json:"addr"`

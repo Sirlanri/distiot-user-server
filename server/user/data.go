@@ -78,3 +78,20 @@ func InsertUserMysql(mail, pw string) error {
 	}
 	return nil
 }
+
+//更新用户密码。传入用户邮箱，未加密的密码
+func UpdatePW(usermail string, pw string) error {
+	var user User
+	hashed, err := encrypt.GenerateHash(pw)
+	if err != nil {
+		log.Log.Warnln("server-user UpdatePW 加密失败", err.Error())
+		return err
+	}
+	user.Pw = hashed
+	err = db.Mdb.Table("users").Where("mail = ?", usermail).Update("pw", hashed).Error
+	if err != nil {
+		log.Log.Warnln("server-user UpdatePW 更新MySQL失败", err.Error())
+		return err
+	}
+	return nil
+}

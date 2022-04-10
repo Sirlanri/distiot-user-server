@@ -92,8 +92,28 @@ func ApplyVcodeHandler(con iris.Context) {
 }
 
 //handler 处理重置密码请求
-func ResetPW(con iris.Context) {
-
+func ResetPWHandler(con iris.Context) {
+	var userData UserRegisterData
+	err := con.ReadJSON(&userData)
+	if err != nil {
+		con.StatusCode(401)
+		log.Log.Infoln("httpHandler ResetPW 参数错误")
+		con.WriteString("参数错误")
+		return
+	}
+	err = user.ResetPWVerify(userData.Mail, userData.Vcode)
+	if err != nil {
+		con.StatusCode(401)
+		con.WriteString("邮箱不存在或验证码错误")
+		return
+	}
+	err = user.UpdatePW(userData.Mail, userData.Pw)
+	if err != nil {
+		con.StatusCode(401)
+		con.WriteString("服务器错误，重置密码失败")
+		return
+	}
+	con.StatusCode(200)
 }
 
 //用户登录数据
