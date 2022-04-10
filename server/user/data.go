@@ -22,7 +22,7 @@ func GetUserByMailMysql(mail string) (*User, error) {
 	user := new(User)
 	err := db.Mdb.Where("mail = ?", mail).First(&user).Error
 	if err != nil {
-		log.Log.Infoln("server-db GetPwByMailMysql 查询失败", err.Error())
+		log.Log.Infoln("server-user GetPwByMailMysql 查询失败", err.Error())
 		return nil, err
 	}
 	return user, nil
@@ -42,7 +42,7 @@ func MailExist(mail string) bool {
 func InsertVcodeRedis(mail, code string) error {
 	_, err := db.Rdb.Set(db.RedisCtx, mail, code, time.Minute*5).Result()
 	if err != nil {
-		log.Log.Warnln("server-db InsertVcode 存入Redis失败", err.Error())
+		log.Log.Warnln("server-user InsertVcode 存入Redis失败", err.Error())
 		return err
 	}
 	return nil
@@ -53,7 +53,7 @@ func GetVcodeRedis(mail string) (string, error) {
 	var code string
 	code, err := db.Rdb.Get(db.RedisCtx, mail).Result()
 	if err != nil {
-		log.Log.Warnln("server-db GetVcodeRedis 从Redis获取验证码失败", err.Error())
+		log.Log.Warnln("server-user GetVcodeRedis 从Redis获取验证码失败", err.Error())
 		return "", err
 	}
 	return code, nil
@@ -65,7 +65,7 @@ func InsertUserMysql(mail, pw string) error {
 	user.Mail = mail
 	hashed, err := encrypt.GenerateHash(pw)
 	if err != nil {
-		log.Log.Warnln("server-db InsertUserMysql 加密失败", err.Error())
+		log.Log.Warnln("server-user InsertUserMysql 加密失败", err.Error())
 		return err
 	}
 	user.Pw = hashed
@@ -73,7 +73,7 @@ func InsertUserMysql(mail, pw string) error {
 	user.Level = 1
 	err = db.Mdb.Omit("ID").Create(&user).Error
 	if err != nil {
-		log.Log.Warnln("server-db InsertUserMysql 存入MySQL失败", err.Error())
+		log.Log.Warnln("server-user InsertUserMysql 存入MySQL失败", err.Error())
 		return err
 	}
 	return nil
