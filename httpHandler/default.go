@@ -8,6 +8,7 @@ import (
 func IrisInit() {
 	app := iris.New()
 	app.Logger().SetLevel("debug")
+	app.OnErrorCode(iris.StatusNotFound, NotFound)
 	user := app.Party("/user").AllowMethods(iris.MethodOptions)
 	{
 		user.Post("/login", LoginHandler)
