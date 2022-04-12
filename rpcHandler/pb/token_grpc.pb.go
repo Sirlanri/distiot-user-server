@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TokenGuideClient interface {
 	GetToken(ctx context.Context, in *Tokenmsg, opts ...grpc.CallOption) (*UserIDmsg, error)
+	GetdIDByToken(ctx context.Context, in *Tokenmsg, opts ...grpc.CallOption) (*DeviceIDsmsg, error)
 }
 
 type tokenGuideClient struct {
@@ -38,11 +39,21 @@ func (c *tokenGuideClient) GetToken(ctx context.Context, in *Tokenmsg, opts ...g
 	return out, nil
 }
 
+func (c *tokenGuideClient) GetdIDByToken(ctx context.Context, in *Tokenmsg, opts ...grpc.CallOption) (*DeviceIDsmsg, error) {
+	out := new(DeviceIDsmsg)
+	err := c.cc.Invoke(ctx, "/pb.TokenGuide/GetdIDByToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TokenGuideServer is the server API for TokenGuide service.
 // All implementations must embed UnimplementedTokenGuideServer
 // for forward compatibility
 type TokenGuideServer interface {
 	GetToken(context.Context, *Tokenmsg) (*UserIDmsg, error)
+	GetdIDByToken(context.Context, *Tokenmsg) (*DeviceIDsmsg, error)
 	mustEmbedUnimplementedTokenGuideServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedTokenGuideServer struct {
 
 func (UnimplementedTokenGuideServer) GetToken(context.Context, *Tokenmsg) (*UserIDmsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetToken not implemented")
+}
+func (UnimplementedTokenGuideServer) GetdIDByToken(context.Context, *Tokenmsg) (*DeviceIDsmsg, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetdIDByToken not implemented")
 }
 func (UnimplementedTokenGuideServer) mustEmbedUnimplementedTokenGuideServer() {}
 
@@ -84,6 +98,24 @@ func _TokenGuide_GetToken_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TokenGuide_GetdIDByToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Tokenmsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TokenGuideServer).GetdIDByToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.TokenGuide/GetdIDByToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TokenGuideServer).GetdIDByToken(ctx, req.(*Tokenmsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TokenGuide_ServiceDesc is the grpc.ServiceDesc for TokenGuide service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +126,10 @@ var TokenGuide_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetToken",
 			Handler:    _TokenGuide_GetToken_Handler,
+		},
+		{
+			MethodName: "GetdIDByToken",
+			Handler:    _TokenGuide_GetdIDByToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

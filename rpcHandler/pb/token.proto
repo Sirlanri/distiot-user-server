@@ -6,6 +6,7 @@ package pb;
 
 service TokenGuide {
     rpc GetToken(Tokenmsg) returns (UserIDmsg) {}
+    rpc GetdIDByToken (Tokenmsg) returns (DeviceIDsmsg) {}
 }
     
 message Tokenmsg {
@@ -13,4 +14,7 @@ message Tokenmsg {
 }
 message UserIDmsg {
     int64 userID = 1;
+}
+message DeviceIDsmsg {
+    repeated int64 deviceIDs = 1;
 }
