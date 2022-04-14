@@ -14,7 +14,19 @@ type User struct {
 	Mail  string `gorm:"varChar(255)"`
 	Pw    string `gorm:"varChar(255)"`
 	Token string `gorm:"varChar(255)"`
+	Dnum  int    `gorm:"default:10"`
 	Level int    `gorm:"int"`
+}
+
+//传入userID，获取用户信息
+func GetUserInfoByIDMysql(userID int) (*User, error) {
+	var user User
+	err := db.Mdb.Where("id = ?", userID).First(&user).Error
+	if err != nil {
+		log.Log.Warnln("server-user GetUserByIDMysql 从MySQL获取用户信息失败", err.Error())
+		return nil, err
+	}
+	return &user, nil
 }
 
 //传入邮箱 从MySQL中获取用户的信息

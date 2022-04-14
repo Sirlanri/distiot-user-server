@@ -7,6 +7,37 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+//handler 用户登录成功后，获取Token和邮箱等个人信息
+func GetUserInfoHandler(con iris.Context) {
+	sess := encrypt.Sess.Start(con)
+	userid, err := sess.GetInt("user_id")
+	if err != nil {
+		con.StatusCode(403)
+		con.WriteString("未登录")
+		log.Log.Infoln("httpHandler GetUserInfoHandler 获取用户id失败", err.Error())
+		return
+	}
+	userInfo, err := user.GetUserInfoByIDMysql(userid)
+	if err != nil {
+		con.StatusCode(404)
+		con.WriteString("获取信息失败")
+		log.Log.Infoln("httpHandler GetUserInfoHandler 获取用户信息失败", err.Error())
+		return
+	}
+	data := make(map[string]interface{})
+	data["mail"] = userInfo.Mail
+	data["token"] = userInfo.Token
+	data["level"] = userInfo.Level
+	data["dnum"] = userInfo.Dnum
+	_, err = con.JSON(data)
+	if err != nil {
+		con.StatusCode(404)
+		con.WriteString("服务器错误 获取信息失败")
+		log.Log.Infoln("httpHandler GetUserInfoHandler 用户信息打包失败", err.Error())
+		return
+	}
+}
+
 //handler 处理登录请求
 func LoginHandler(con iris.Context) {
 	//http传入的用户数据
