@@ -22,9 +22,9 @@ func SessionInit() {
 		MaxActive: 10,
 		Password:  "",
 		Database:  "1",
-		Prefix:    "",
-		Delim:     "iris-",
-		Driver:    redis.Redigo(), // redis.Radix() can be used instead.
+		Prefix:    "iris-",
+		//Delim:     "iris-",
+		//Driver:    GoRedis(), // redis.Radix() can be used instead.
 	})
 	iris.RegisterOnInterrupt(func() {
 		db.Close()
