@@ -7,6 +7,13 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+//用户注销登录
+func LogoutHandler(con iris.Context) {
+	sess := encrypt.Sess.Start(con)
+	sess.Destroy()
+	con.StatusCode(200)
+}
+
 //handler 用户登录成功后，获取Token和邮箱等个人信息
 func GetUserInfoHandler(con iris.Context) {
 	sess := encrypt.Sess.Start(con)

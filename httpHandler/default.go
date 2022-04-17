@@ -18,6 +18,7 @@ func IrisInit() {
 	user := app.Party("/user").AllowMethods(iris.MethodOptions, iris.MethodGet, iris.MethodPost)
 	{
 		user.Post("/login", LoginHandler)
+		user.Get("/logout", LogoutHandler)
 		user.Post("/register", RegisterHandler)
 		user.Get("/applyvcode", ApplyVcodeHandler)
 		user.Post("/resetpw", ResetPWHandler)
