@@ -84,12 +84,13 @@ func InsertUserTokenDeviceRedis(userToken string, deviceID ...int) error {
 //从MySQL中获取设备的数据类型
 func GetTypeMysql(deviceID int) (int32, error) {
 	var device Device
-	err := db.Mdb.Where("did = ?", deviceID).Scan(&device).Error
+	device.Did = deviceID
+	err := db.Mdb.First(&device).Error
 	if err != nil {
 		log.Log.Warnln("server-device GetTypeMysql 从MySQL中获取设备数据类型失败", err.Error())
 		return 0, err
 	}
-	return device.DataType, nil
+	return device.Datatype, nil
 }
 
 //数据库中的device模型
@@ -97,5 +98,5 @@ type Device struct {
 	Did      int    `gorm:"primary_key"`
 	Uid      int    `gorm:"int"`
 	Dname    string `gorm:"varchar(255)"`
-	DataType int32  `gorm:"tinyint"`
+	Datatype int32  `gorm:"tinyint"`
 }
