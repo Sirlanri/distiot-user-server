@@ -10,12 +10,12 @@ import (
 	"github.com/Sirlanri/distiot-user-server/server/token"
 )
 
-type tokenServer struct {
-	pb.TokenGuideServer
+type servers struct {
+	pb.AllRpcServerServer
 }
 
-//token RPC服务
-func (s *tokenServer) GetUidByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.UserIDmsg, error) {
+//RPC 获取用户ID，传入token
+func (s *servers) GetUidByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.UserIDmsg, error) {
 	log.Log.Debugln("RPC服务-GetUidByToken 传入", req.String())
 	id, err := token.GetUserIDByToken(req.Token)
 	if err != nil {
@@ -25,7 +25,8 @@ func (s *tokenServer) GetUidByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.
 	return &pb.UserIDmsg{UserID: int64(id)}, nil
 }
 
-func (s *tokenServer) GetdIDByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.DeviceIDsmsg, error) {
+//RPC 获取设备ID列表 传入token
+func (s *servers) GetdIDByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.DeviceIDsmsg, error) {
 	log.Log.Debugln("RPC服务-GetdIDByToken 传入", req.String())
 	id, err := device.GetAllDeviceIDByToken(req.Token)
 	if err != nil {
@@ -37,4 +38,15 @@ func (s *tokenServer) GetdIDByToken(ctx context.Context, req *pb.Tokenmsg) (*pb.
 		ids = append(ids, int64(v))
 	}
 	return &pb.DeviceIDsmsg{DeviceIDs: ids}, nil
+}
+
+//RPC 传入设备ID，获取设备的数据类型，
+func (s *servers) GetDataTypeBydID(ctx context.Context, req *pb.Didmsg) (*pb.DataTypemsg, error) {
+	log.Log.Debugln("RPC服务-GetDataTypeBydID 传入", req.String())
+	id, err := device.GetTypeMysql(int(req.Id))
+	if err != nil {
+		log.Log.Warnln("RPC服务 获取数据类型失败", err.Error())
+		return nil, errors.New("设备ID错误")
+	}
+	return &pb.DataTypemsg{DataType: id}, nil
 }

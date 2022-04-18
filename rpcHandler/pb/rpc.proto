@@ -2,25 +2,13 @@ syntax = "proto3";
 
 option go_package = "github.com/Sirlanri/distiot-user-server/rpcHandler/pb";
 
-package devicepb;
+package pb;
 
-//Device 相关服务
-service DeviceService {
-    rpc GetDataTypeBydID (Didmsg) returns (DataTypemsg) {}
-}
 
-message Didmsg {
-    int64 id = 1;
-}
-
-message DataTypemsg {
-    int32 dataType = 1;
-}
-
-//Token相关服务
-service TokenGuide {
+service allRpcServer {
     rpc GetUidByToken(Tokenmsg) returns (UserIDmsg) {}
     rpc GetdIDByToken (Tokenmsg) returns (DeviceIDsmsg) {}
+    rpc GetDataTypeBydID (Didmsg) returns (DataTypemsg) {}
 }
     
 message Tokenmsg {
@@ -31,4 +19,12 @@ message UserIDmsg {
 }
 message DeviceIDsmsg {
     repeated int64 deviceIDs = 1;
+}
+
+message Didmsg {
+    int64 id = 1;
+}
+
+message DataTypemsg {
+    int32 dataType = 1;
 }

@@ -14,19 +14,16 @@ func RPCListen() {
 	addr := "localhost:" + config.Config.RpcPort
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
-		log.Log.Errorln("failed to listen: %v", err)
+		log.Log.Errorln("RPC 无法监听端口", err)
 	}
 
-	s1 := grpc.NewServer()
-	pb.RegisterDeviceServiceServer(s1, &deviceServer{})
-	pb.RegisterTokenGuideServer(s1, &tokenServer{})
-	log.Log.Debugln("RPC server1 listening at %v", lis.Addr())
-	if err := s1.Serve(lis); err != nil {
-		log.Log.Errorln("failed to serve s1: %v", err)
+	s := grpc.NewServer()
+	pb.RegisterAllRpcServerServer(s, &servers{})
+
+	log.Log.Debugln("RPC server 监听端口：", lis.Addr())
+	err = s.Serve(lis)
+	if err != nil {
+		log.Log.Errorln("RPC服务启动失败", err)
 	}
 
-	log.Log.Debugln("RPC server2 listening at %v", lis.Addr())
-	if err := s1.Serve(lis); err != nil {
-		log.Log.Errorln("failed to serve s2: %v", err)
-	}
 }

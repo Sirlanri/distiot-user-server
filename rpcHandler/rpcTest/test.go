@@ -19,7 +19,7 @@ func RPCTest(usertoken string) {
 		return
 	}
 	defer conn.Close()
-	c := pb.NewTokenGuideClient(conn)
+	c := pb.NewAllRpcServerClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := c.GetUidByToken(ctx, &pb.Tokenmsg{
@@ -43,7 +43,7 @@ func RPCTest2(id int) {
 	}
 	defer conn.Close()
 	log.Log.Debugln("开始device测试")
-	c2 := pb.NewDeviceServiceClient(conn)
+	c2 := pb.NewAllRpcServerClient(conn)
 	ctx2, cancel2 := context.WithTimeout(context.Background(), time.Second)
 	defer cancel2()
 	r2, err2 := c2.GetDataTypeBydID(ctx2, &pb.Didmsg{
