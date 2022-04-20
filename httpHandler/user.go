@@ -71,7 +71,7 @@ func LoginHandler(con iris.Context) {
 	sess := encrypt.Sess.Start(con)
 	sess.Set("user_id", userDB.ID)
 	sess.Set("user_level", userDB.Level)
-
+	sess.Set("user_token", userDB.Token)
 	con.StatusCode(200)
 	return
 

@@ -1,16 +1,15 @@
 package device
 
-import "github.com/Sirlanri/distiot-user-server/server/token"
+import (
+	"github.com/Sirlanri/distiot-user-server/server/db"
+	"github.com/Sirlanri/distiot-user-server/server/token"
+)
 
 /* 用户创建新设备
 传入token，调用GetUserIDByToken获取userID，将映射关系存入redis的集合，
 返回设备的ID
 */
-func CreateDevice(userToken, dName string, dataType int) (int, error) {
-	userid, err := token.GetUserIDByToken(userToken)
-	if err != nil {
-		return 0, err
-	}
+func CreateDevice(userToken, dName string, userid, dataType int) (int, error) {
 	//插入数据库
 	did, err := InsertUserDeviceMysql(userid, int(dataType), dName)
 	if err != nil {
@@ -42,4 +41,11 @@ func GetAllDeviceIDByToken(userToken string) (*[]int, error) {
 		InsertUserTokenDeviceRedis(userToken, *didList...)
 	}
 	return didList, nil
+}
+
+//传入用户ID，获取该用户全部的device信息
+func GetAllDevicesByIDMysql(userID int) (*[]Device, error) {
+	var devices []Device
+	db.Mdb.Where("uid=?", userID).Find(&devices)
+	return &devices, nil
 }
