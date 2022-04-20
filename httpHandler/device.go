@@ -11,12 +11,13 @@ import (
 func CreateDeviceHandler(con iris.Context) {
 	token := con.GetHeader("token")
 	dName := con.URLParam("dname")
-	if token == "" || dName == "" {
+	dataType := con.URLParamIntDefault("dataType", 0)
+	if token == "" || dName == "" || dataType == 0 {
 		con.StatusCode(401)
 		con.WriteString("传入数据不合法，token和设备名不能为空")
 		return
 	}
-	did, err := device.CreateDevice(token, dName)
+	did, err := device.CreateDevice(token, dName, dataType)
 	if err != nil {
 		con.StatusCode(500)
 		con.WriteString("服务器错误，创建失败")

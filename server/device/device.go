@@ -6,13 +6,13 @@ import "github.com/Sirlanri/distiot-user-server/server/token"
 传入token，调用GetUserIDByToken获取userID，将映射关系存入redis的集合，
 返回设备的ID
 */
-func CreateDevice(userToken, dName string) (int, error) {
+func CreateDevice(userToken, dName string, dataType int) (int, error) {
 	userid, err := token.GetUserIDByToken(userToken)
 	if err != nil {
 		return 0, err
 	}
 	//插入数据库
-	did, err := InsertUserDeviceMysql(userid, dName)
+	did, err := InsertUserDeviceMysql(userid, int(dataType), dName)
 	if err != nil {
 		return 0, err
 	}

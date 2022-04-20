@@ -9,10 +9,11 @@ import (
 )
 
 //将deviceID-userID-deviceName存入mysql，返回该设备ID
-func InsertUserDeviceMysql(userID int, name string) (int, error) {
+func InsertUserDeviceMysql(userID, dataType int, name string) (int, error) {
 	var device Device
 	device.Uid = userID
 	device.Dname = name
+	device.Datatype = int32(dataType)
 	err := db.Mdb.Create(&device).Error
 	if err != nil {
 		log.Log.Warnln("server-device InsertUserDeviceMysql 存入MySQL失败", err.Error())
