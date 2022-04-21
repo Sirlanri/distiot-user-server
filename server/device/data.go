@@ -36,8 +36,7 @@ func InsertUserDeviceRedis(userToken string, deviceID int) error {
 func GetAllDeviceIDByTokenRedis(userToken string) (*[]int, error) {
 	deviceIDList := make([]int, 0)
 	ids := db.Rdb.SMembers(db.RedisCtx, userToken).Val()
-	for index, id := range ids {
-		log.Log.Debugln(index, id)
+	for _, id := range ids {
 		deviceID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Log.Warnln("server-device GetAllDeviceIDByTokenRedis 获取Redis中的Token-dID集合 转换失败", err.Error())
