@@ -24,6 +24,7 @@ func IrisInit() {
 		user.Post("/resetpw", ResetPWHandler)
 		user.Get("/createdevice", CreateDeviceHandler)
 		user.Get("/getdevices", GetDevicesHandler)
+		user.Get("/getdeviceids", GetDeviceIDsHandler)
 		user.Get("/getuserinfo", GetUserInfoHandler)
 	}
 	var portStr = config.Config.HttpPort
