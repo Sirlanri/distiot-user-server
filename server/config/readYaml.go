@@ -26,7 +26,7 @@ type Conf struct {
 var Config Conf
 
 func ReadYaml() {
-	buf, err := ioutil.ReadFile("conf.yaml")
+	buf, err := ioutil.ReadFile("userconf.yaml")
 	if err != nil {
 		log.Log.Warnln("server-config ReadYaml 读取配置文件失败", err.Error())
 		return
