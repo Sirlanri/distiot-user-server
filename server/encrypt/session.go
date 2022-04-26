@@ -3,6 +3,7 @@ package encrypt
 import (
 	"time"
 
+	"github.com/Sirlanri/distiot-user-server/server/config"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 	"github.com/kataras/iris/v12/sessions/sessiondb/redis"
@@ -17,10 +18,9 @@ func init() {
 func SessionInit() {
 	db := redis.New(redis.Config{
 		Network:   "tcp",
-		Addr:      "127.0.0.1:6379",
+		Addr:      config.Config.RedisAddr,
 		Timeout:   2 * time.Second,
 		MaxActive: 10,
-		Password:  "",
 		Database:  "1",
 		Prefix:    "iris-",
 		//Delim:     "iris-",
