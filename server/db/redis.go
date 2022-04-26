@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"github.com/Sirlanri/distiot-user-server/server/config"
 	"github.com/Sirlanri/distiot-user-server/server/log"
 	"github.com/go-redis/redis/v8"
 )
@@ -15,9 +16,10 @@ var Rdb *redis.Client
 
 func connectRedis() {
 	Rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       1,  // 使用1数据库
+		Addr:     config.Config.RedisAddr,
+		Username: config.Config.RedisName,
+		Password: config.Config.RedisPW,
+		DB:       config.Config.RedisDB, // 使用1数据库
 	})
 
 	str, err := Rdb.Ping(RedisCtx).Result()

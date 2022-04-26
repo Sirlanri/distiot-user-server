@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/Sirlanri/distiot-user-server/server/config"
 	"github.com/Sirlanri/distiot-user-server/server/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -18,7 +19,7 @@ func init() {
 
 func connectMysqlByGorm() {
 	var err error
-	dsn := "root:123456@tcp(127.0.0.1:3306)/distiot-user?parseTime=true"
+	dsn := config.Config.MysqlUrl
 	Mdb, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		log.Log.Errorln("server-db MySQL连接失败", err.Error())

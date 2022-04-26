@@ -2,10 +2,6 @@ package config
 
 import (
 	"io/ioutil"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"strings"
 
 	"github.com/Sirlanri/distiot-user-server/server/log"
 	"gopkg.in/yaml.v3"
@@ -19,18 +15,18 @@ type Conf struct {
 	EmailToken string `yaml:"emailtoken"`
 	HttpPort   string `yaml:"httpport"`
 	RpcPort    string `yaml:"rpcport"`
+	RedisAddr  string `yaml:"redisAddr"`
+	RedisName  string `yaml:"redisName"`
+	RedisPW    string `yaml:"redisPW"`
+	RedisDB    int    `yaml:"redisDB"`
+	MysqlUrl   string `yaml:"mysqlUrl"`
 }
 
 //全局配置文件
 var Config Conf
 
 func ReadYaml() {
-	file, _ := exec.LookPath(os.Args[0])
-	path, _ := filepath.Abs(file)
-	index := strings.LastIndex(path, string(os.PathSeparator))
-	path = path[:index+1]
-	fullPath := path + "conf.yaml"
-	buf, err := ioutil.ReadFile(fullPath)
+	buf, err := ioutil.ReadFile("conf.yaml")
 	if err != nil {
 		log.Log.Warnln("server-config ReadYaml 读取配置文件失败", err.Error())
 		return
