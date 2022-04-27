@@ -19,6 +19,8 @@ func SessionInit() {
 	db := redis.New(redis.Config{
 		Network:   "tcp",
 		Addr:      config.Config.RedisAddr,
+		Username:  config.Config.RedisName,
+		Password:  config.Config.RedisPW,
 		Timeout:   2 * time.Second,
 		MaxActive: 10,
 		Database:  "1",
