@@ -68,7 +68,7 @@ func LoginHandler(con iris.Context) {
 		return
 	}
 	//进行权限的设置
-	sess := encrypt.Sess.Start(con)
+	sess := encrypt.Sess.Start(con, iris.CookieSecure, iris.CookieSameSite(iris.SameSiteNoneMode))
 	sess.Set("user_id", userDB.ID)
 	sess.Set("user_level", userDB.Level)
 	sess.Set("user_token", userDB.Token)

@@ -19,7 +19,7 @@ func connectRedis() {
 		Addr:     config.Config.RedisAddr,
 		Username: config.Config.RedisName,
 		Password: config.Config.RedisPW,
-		DB:       config.Config.RedisDB, // 使用1数据库
+		DB:       config.Config.RedisDB, 
 	})
 
 	str, err := Rdb.Ping(RedisCtx).Result()

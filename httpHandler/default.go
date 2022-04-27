@@ -8,12 +8,13 @@ import (
 
 func IrisInit() {
 	app := iris.New()
-	app.Logger().SetLevel("debug")
+	app.Logger().SetLevel("info")
 	crs := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowCredentials: true,
+		Debug:            true,
 	})
-	app.Use(crs)
+	app.UseRouter(crs)
 	app.OnErrorCode(iris.StatusNotFound, NotFound)
 	user := app.Party("/user").AllowMethods(iris.MethodOptions, iris.MethodGet, iris.MethodPost)
 	{
