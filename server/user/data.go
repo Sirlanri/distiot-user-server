@@ -10,7 +10,7 @@ import (
 
 //包含id、mail、pw
 type User struct {
-	ID    string `gorm:"primary_key"`
+	ID    int    `gorm:"primary_key"`
 	Mail  string `gorm:"varChar(255)"`
 	Pw    string `gorm:"varChar(255)"`
 	Token string `gorm:"varChar(255)"`

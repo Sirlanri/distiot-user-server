@@ -32,8 +32,9 @@ func SessionInit() {
 
 	//全局Session
 	Sess = sessions.New(sessions.Config{
-		Cookie:       "sessionscookieid",
-		AllowReclaim: true,
+		Cookie: "sessionscookieid",
+		//AllowReclaim:    true,
+		CookieSecureTLS: true,
 	})
 	Sess.UseDatabase(db)
 }
