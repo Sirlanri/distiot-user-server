@@ -10,9 +10,9 @@ func IrisInit() {
 	app := iris.New()
 	app.Logger().SetLevel("info")
 	crs := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
-		Debug:            true,
+		Debug:            false,
 	})
 	app.UseRouter(crs)
 	app.OnErrorCode(iris.StatusNotFound, NotFound)
